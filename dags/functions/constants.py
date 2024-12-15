@@ -16,3 +16,4 @@ headers = {
 }
 
 base_url = "https://www.flipkart.com/search?q=mobile+phones&sort=popularity"
+next_url = "https://www.flipkart.com"

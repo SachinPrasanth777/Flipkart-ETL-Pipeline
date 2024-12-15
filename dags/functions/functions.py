@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from functions.constants import headers, base_url
+from functions.constants import headers, base_url, next_url
 
 def get_soup(url):
     response = requests.get(url, headers=headers)
@@ -15,7 +15,7 @@ def fetch_product_data(container):
     rating = extract_rating(container)
     price = extract_price(container)
     features = extract_features(container)
-    reviews = extract_reviews(container)
+    ratings_count, reviews_count = extract_reviews(container)
     image = extract_image(container)
 
     return {
@@ -23,7 +23,8 @@ def fetch_product_data(container):
         "rating": rating,
         "price": price,
         "features": features,
-        "reviews": reviews,
+        "ratings_count": ratings_count,
+        "reviews_count": reviews_count,
         "image": image,
     }
 
@@ -45,7 +46,19 @@ def extract_features(container):
 
 def extract_reviews(container):
     reviews_element = container.find("span", {"class": "Wphh3N"})
-    return reviews_element.text if reviews_element else "No reviews"
+    ratings_count = "No ratings"
+    reviews_count = "No reviews"
+    
+    if reviews_element:
+        reviews_text = reviews_element.text.strip()
+        parts = reviews_text.split('&')
+        if len(parts) == 2:
+            ratings_count = parts[0].strip()
+            reviews_count = parts[1].strip()
+        else:
+            reviews_count = reviews_text
+
+    return ratings_count, reviews_count
 
 def extract_image(container):
     image_element = container.find("img", {"class": "DByuf4"})
@@ -61,7 +74,7 @@ def fetch_mobile_titles(soup):
 
     return products
 
-def scrape_all_pages(max_pages=10):
+def scrape_all_pages(max_pages=25):
     next_page_url = base_url
     all_products = []
     page_count = 0
@@ -76,7 +89,7 @@ def scrape_all_pages(max_pages=10):
 
         next_button = soup.find("a", {"class": "_9QVEpD"})
         if next_button:
-            next_page_url = "https://www.flipkart.com" + next_button["href"]
+            next_page_url = next_url + next_button["href"]
             page_count += 1
         else:
             break
