@@ -1,28 +1,24 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from airflow.decorators import dag, task
-from bs4 import BeautifulSoup
-import requests
-from constants.constants import default_args, headers, base_url
-
+from functions.functions import scrape_all_pages
 
 @dag(
     dag_id="setup_soup",
-    default_args=default_args,
+    default_args={
+        "owner": "airflow",
+        "retries": 1,
+        "retry_delay": timedelta(minutes=5),
+    },
     start_date=datetime(2024, 12, 15),
     schedule_interval="@hourly",
 )
 def scrape_data():
 
     @task()
-    def get_soup(url):
-        response = requests.get(url, headers=headers)
-        if response.status_code == 200:
-            return BeautifulSoup(response.text, "html.parser")
-        else:
-            print(f"Failed to fetch page: {url}, Status code: {response.status_code}")
-            return None
+    def fetch_all_products():
+        all_products = scrape_all_pages(max_pages=25)
+        return all_products
 
-    get_soup(base_url)
-
+    fetch_all_products()
 
 scrape_data()
