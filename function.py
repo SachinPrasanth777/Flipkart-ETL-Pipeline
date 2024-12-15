@@ -12,6 +12,7 @@ headers = {
 
 base_url = "https://www.flipkart.com/search?q=mobile+phones&sort=popularity"
 
+
 def get_soup(url):
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
@@ -31,7 +32,7 @@ def fetch_mobile_titles(soup):
         price = container.find("div", {"class": "Nx9bqj _4b5DiR"})
         features = container.find("div", {"class": "_6NESgJ"})
         reviews = container.find("span", {"class": "Wphh3N"})
-        image = container.find("img",{"class": "DByuf4"})
+        image = container.find("img", {"class": "DByuf4"})
 
         if title_element:
             title_text = title_element.text
@@ -48,7 +49,7 @@ def fetch_mobile_titles(soup):
                     "price": price_text,
                     "features": features_text,
                     "reviews": reviews_text,
-                    "image": image_url
+                    "image": image_url,
                 }
             )
 
@@ -61,7 +62,7 @@ def fetch_mobile_titles(soup):
                 product["price"],
                 product["features"],
                 product["reviews"],
-                product["image"]
+                product["image"],
             )
     else:
         print("No product titles found.")
@@ -89,5 +90,6 @@ def scrape_all_pages():
             next_page_url = None
 
     print(f"Scraped a total of {len(all_products)} products.")
+
 
 scrape_all_pages()
