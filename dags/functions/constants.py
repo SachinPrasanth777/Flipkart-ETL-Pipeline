@@ -37,3 +37,6 @@ insert_query = """
                VALUES(%s,%s,%s,%s,%s,%s,%s)
                ON CONFLICT (title,features,price) DO NOTHING
                """
+
+BUCKET_NAME = "bucket"
+CSV_FILE_NAME = "data.csv"
