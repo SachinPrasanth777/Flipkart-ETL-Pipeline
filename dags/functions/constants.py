@@ -27,6 +27,13 @@ create_query = """
                 rating DOUBLE PRECISION NOT NULL,
                 ratings_count BIGINT NOT NULL,
                 reviews_count BIGINT NOT NULL,
-                image TEXT NULL
+                image TEXT NULL,
+                CONSTRAINT unique_title_features UNIQUE(title,features,price)
                 )
                 """
+
+insert_query = """
+               INSERT INTO data(title,features,price,rating,ratings_count,reviews_count,image)
+               VALUES(%s,%s,%s,%s,%s,%s,%s)
+               ON CONFLICT (title,features,price) DO NOTHING
+               """

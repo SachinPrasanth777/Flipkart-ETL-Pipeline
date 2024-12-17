@@ -90,7 +90,7 @@ def fetch_mobile_titles(soup):
     return products
 
 
-def scrape_all_pages(max_pages=25):
+def scrape_all_pages(max_pages=100):
     next_page_url = base_url
     all_products = []
     page_count = 0
