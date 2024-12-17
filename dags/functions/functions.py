@@ -1,6 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 from functions.constants import headers, base_url, next_url
+import re
+
 
 def get_soup(url):
     response = requests.get(url, headers=headers)
@@ -9,6 +11,7 @@ def get_soup(url):
     else:
         print(f"Failed to fetch page: {url}, Status code: {response.status_code}")
         return None
+
 
 def fetch_product_data(container):
     title = extract_title(container)
@@ -28,41 +31,53 @@ def fetch_product_data(container):
         "image": image,
     }
 
+
 def extract_title(container):
     title_element = container.find("div", {"class": "KzDlHZ"})
     return title_element.text if title_element else "No title"
 
+
 def extract_rating(container):
     rating_element = container.find("div", {"class": "XQDdHH"})
-    return rating_element.text if rating_element else "No rating"
+    rating_text = rating_element.text if rating_element else ""
+    return float(re.sub(r"[^\d.]", "", rating_text)) if rating_text else 0.0
+
 
 def extract_price(container):
     price_element = container.find("div", {"class": "Nx9bqj _4b5DiR"})
-    return price_element.text if price_element else "No price"
+    price_text = price_element.text if price_element else ""
+    return float(re.sub(r"[^\d.]", "", price_text)) if price_text else 0.0
+
 
 def extract_features(container):
     features_element = container.find("div", {"class": "_6NESgJ"})
     return features_element.text if features_element else "No features"
 
+
 def extract_reviews(container):
     reviews_element = container.find("span", {"class": "Wphh3N"})
-    ratings_count = "No ratings"
-    reviews_count = "No reviews"
-    
+    ratings_count = 0
+    reviews_count = 0
+
     if reviews_element:
         reviews_text = reviews_element.text.strip()
-        parts = reviews_text.split('&')
+        parts = reviews_text.split("&")
         if len(parts) == 2:
-            ratings_count = parts[0].strip()
-            reviews_count = parts[1].strip()
+            ratings_count = re.sub(r"\D", "", parts[0])
+            reviews_count = re.sub(r"\D", "", parts[1])
         else:
-            reviews_count = reviews_text
+            reviews_count = re.sub(r"\D", "", reviews_text)
+
+    ratings_count = int(ratings_count) if ratings_count else 0
+    reviews_count = int(reviews_count) if reviews_count else 0
 
     return ratings_count, reviews_count
+
 
 def extract_image(container):
     image_element = container.find("img", {"class": "DByuf4"})
     return image_element["src"] if image_element else "No image"
+
 
 def fetch_mobile_titles(soup):
     product_containers = soup.find_all("div", {"class": "_75nlfW"})
@@ -73,6 +88,7 @@ def fetch_mobile_titles(soup):
         products.append(product_data)
 
     return products
+
 
 def scrape_all_pages(max_pages=25):
     next_page_url = base_url
