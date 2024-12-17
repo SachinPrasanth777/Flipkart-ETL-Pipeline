@@ -33,7 +33,7 @@ This Apache Airflow-based ETL (Extract, Transform, Load) pipeline is designed to
    ### PgAdmin UI
    - **URL**: `http://localhost:5050`
    - **Username**: `admin@admin.com`
-   - **Password**: `roor`
+   - **Password**: `root`
    ### Minio UI (Object Storage)
    - **URL**: `http://localhost:9090`
    - **Username**: `airflow1234`
