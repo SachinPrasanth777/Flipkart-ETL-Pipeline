@@ -3,9 +3,20 @@ from airflow.decorators import dag, task
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.providers.amazon.aws.hooks.s3 import S3Hook
 from functions.functions import scrape_all_pages
-from functions.constants import create_query, default_args, insert_query, BUCKET_NAME, CSV_FILE_NAME
+from functions.constants import (
+    create_query,
+    default_args,
+    insert_query,
+    BUCKET_NAME,
+    CSV_FILE_NAME,
+    PATH,
+)
+from airflow.datasets import Dataset
 from io import StringIO
 import csv
+
+path = Dataset(PATH)
+
 
 @dag(
     dag_id="setup_soup",
@@ -42,7 +53,7 @@ def scrape_data():
                 ),
             )
 
-    @task()
+    @task(outlets=[path])
     def convert_to_csv():
         pg_hook = PostgresHook(postgres_conn_id="postgres_local")
         query = "SELECT * FROM data"
@@ -79,5 +90,6 @@ def scrape_data():
     upload_task = upload_to_minio(csv_data)
 
     create_table_task >> products >> insert_table_task >> csv_data >> upload_task
+
 
 scrape_data()
