@@ -17,3 +17,16 @@ headers = {
 
 base_url = "https://www.flipkart.com/search?q=mobile+phones&sort=popularity"
 next_url = "https://www.flipkart.com"
+
+create_query = """
+                CREATE TABLE IF NOT EXISTS data(
+                id SERIAL PRIMARY KEY,
+                title TEXT NOT NULL,
+                features TEXT NOT NULL,
+                price BIGINT NOT NULL,
+                rating DOUBLE PRECISION NOT NULL,
+                ratings_count BIGINT NOT NULL,
+                reviews_count BIGINT NOT NULL,
+                image TEXT NULL
+                )
+                """
