@@ -19,7 +19,7 @@ This Apache Airflow-based ETL (Extract, Transform, Load) pipeline is designed to
 ### Using Docker Compose
 1. Clone the repository:
    ```bash
-   git clone https://github.com/SachinPrasanth777/ETL-Pipeline.git
+   git clone https://github.com/SachinPrasanth777/Flipkart-ETL-Pipeline
    ```
 2. Build and start the services:
    ```bash

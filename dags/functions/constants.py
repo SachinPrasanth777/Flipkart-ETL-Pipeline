@@ -1,4 +1,8 @@
 from datetime import timedelta
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 default_args = {
     "owner": "Sachin Prasanth",
@@ -40,4 +44,4 @@ insert_query = """
 
 BUCKET_NAME = "bucket"
 CSV_FILE_NAME = "data.csv"
-PATH = "http://localhost:9090/api/v1/download-shared-object/aHR0cDovLzEyNy4wLjAuMTo5MDAwL2J1Y2tldC9kYXRhLmNzdj9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPVVVNlY1TjE4N1pFUkpTWUVLQ1pRJTJGMjAyNDEyMTclMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQxMjE3VDEzMzAxM1omWC1BbXotRXhwaXJlcz00MzIwMCZYLUFtei1TZWN1cml0eS1Ub2tlbj1leUpoYkdjaU9pSklVelV4TWlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKaFkyTmxjM05MWlhraU9pSlZWVFpXTlU0eE9EZGFSVkpLVTFsRlMwTmFVU0lzSW1WNGNDSTZNVGN6TkRRM05UWTBNaXdpY0dGeVpXNTBJam9pWVdseVpteHZkekV5TXpRaWZRLlJ4clJBM1U1dU9rc2c3M0NaSkViVHNQeHZxWHMyVkxBQWdnVTdGSGZ5R2V5dHVhYVRWZTkzd0Q3eThaRGtzVnJvTFl5YmNaRHpWV2xUR1liRXN3NGJ3JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZ2ZXJzaW9uSWQ9bnVsbCZYLUFtei1TaWduYXR1cmU9OGQ0ZTgxNzYxNmU0MTA5NjMyMTJiODgyYmFjMmFmNTYyNTQyZWI2MWRmYzViNTQ1YmNlYzc3ZDdmNmQ0NTVhNw"
+PATH = os.getenv("PATH")
